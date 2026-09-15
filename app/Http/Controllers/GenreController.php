@@ -36,11 +36,15 @@ class GenreController extends Controller
 
     public function edit(Genre $genre)
     {
+        $this->authorize('update', $genre);
+        
         return view('genres.edit', compact('genre'));
     }
 
     public function update(Request $request, Genre $genre)
     {
+        $this->authorize('update', $genre);
+
         $genre->update($request->validated());
 
         return redirect()->route('genres.index')
