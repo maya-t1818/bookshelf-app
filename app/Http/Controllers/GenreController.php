@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Genre;
 use Illuminate\Http\Request;
+use app\Http\Requests\StoreGenreRequest;
+use app\Http\Requests\UpdateGenreRequest;
 
 class GenreController extends Controller
 {
@@ -19,7 +21,7 @@ class GenreController extends Controller
         return view('genres.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreGenreRequest $request)
     {
         Genre::create($request->validated());
 
@@ -41,7 +43,7 @@ class GenreController extends Controller
         return view('genres.edit', compact('genre'));
     }
 
-    public function update(Request $request, Genre $genre)
+    public function update(UpdateGenreRequest $request, Genre $genre)
     {
         $this->authorize('update', $genre);
 

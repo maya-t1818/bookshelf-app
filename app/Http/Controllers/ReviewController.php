@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use app\Models\Review;
 use App\Models\Book;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreReviewRequest;
+use App\Http\Requests\UpdateReviewRequest;
 
 class ReviewController extends Controller
 {
-    public function store(Request $request, Book $book)
+    public function store(StoreReviewRequest $request, Book $book)
     {
         $book->reviews()->create([
             'user_id' => $request->user()->id,
@@ -26,7 +28,7 @@ class ReviewController extends Controller
         return view('reviews.edit', compact('review'));
     }
 
-    public function update(Request $request, Review $review)
+    public function update(UpdateReviewRequest $request, Review $review)
     {
         $this->authorize('update', $review);
 
