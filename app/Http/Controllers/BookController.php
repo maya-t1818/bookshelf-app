@@ -35,6 +35,8 @@ class BookController extends Controller
     
     public function create()
     {
+        $this->authorize('create', Book::class);
+
         $genres = Genre::all();
 
         return view('books.create', compact('genres'));
