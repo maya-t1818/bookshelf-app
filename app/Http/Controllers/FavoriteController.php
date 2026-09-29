@@ -2,25 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use app\Models\Book;
+use App\Models\Book;
 use Illuminate\Http\Request;
 
 class FavoriteController extends Controller
 {
     public function index(Request $request)
     {
-        $favoriteBooks = $request->user()
-            ->favorites()
+        $books = $request->user()
+            ->favoriteBooks()
             ->with('genres')
             ->latest()
             ->paginate(10);
 
-        return view('favorites.index', compact('favoriteBooks'));
+        return view('favorites.index', compact('books'));
     }
 
     public function toggle(Request $request, Book $book)
     {
-        $request->user()->favorites()->toggle($book->id);
+        $request->user()->favoriteBooks()->toggle($book->id);
 
         return back();
     }

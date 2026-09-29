@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\api\v1\StoreBookRequest;
+use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
-use app\Models\Book;
-use app\Models\Genre;
+use App\Models\Book;
+use App\Models\Genre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -20,16 +20,18 @@ class BookController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('books.index', compact('books'));
+        
+        return view('books.index', compact('books', ));
     }
 
     public function show(Book $book)
     {
+
         $book->load([
             'genres',
             'reviews.user',
-            'reviews.reviewLikes',
-            ])->loadCount(['favorites']);
+            'reviews.likedByUsers'
+            ])->loadCount(['favoriteBooks']);
 
         return view('books.show', compact('book'));
     }
@@ -53,7 +55,7 @@ class BookController extends Controller
             'author' => $validated['author'],
             'description' => $validated['description'] ?? null,
             'isbn' => $validated['isbn'] ,
-            'published_at' => $validated['published_at'] ,
+            'published_date' => $validated['published_date'] ,
             'image_url' => $validated['image_url'] ?? null,
         ]);
 
@@ -81,7 +83,7 @@ class BookController extends Controller
             'author' => 'required|string|max:255',
             'description' => 'required|string',
             'isbn' => 'nullable|string|max:13',
-            'published_at' => 'nullable|date',
+            'published_date' => 'required|date',
             'image_url' => 'nullable|url',
             'genres' => 'required|array',
             'genres.*' => 'exists:genres,id',
@@ -92,7 +94,7 @@ class BookController extends Controller
             'author' => $validated['author'],
             'description' => $validated['description'] ?? null,
             'isbn' => $validated['isbn'],
-            'published_at' => $validated['published_at'],
+            'published_date' => $validated['published_date'],
             'image_url' => $validated['image_url'] ?? null,
         ]);
 

@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Genre;
 use Illuminate\Http\Request;
-use app\Http\Requests\StoreGenreRequest;
-use app\Http\Requests\UpdateGenreRequest;
+use App\Http\Requests\StoreGenreRequest;
+use App\Http\Requests\UpdateGenreRequest;
 
 class GenreController extends Controller
 {

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use app\Models\Review;
+use App\Models\Review;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreReviewRequest;

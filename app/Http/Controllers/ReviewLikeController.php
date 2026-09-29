@@ -9,7 +9,7 @@ class ReviewLikeController extends Controller
 {
     public function toggle(Request $request, Review $review)
     {
-        $request->user()->reviewLikes()->toggle($review->id);
+        $request->user()->LikedReviews()->toggle($review->id);
 
         return back();
     }

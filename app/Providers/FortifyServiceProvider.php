@@ -16,6 +16,7 @@ use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Fortify;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Laravel\Fortify\Contracts\LogoutResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -70,5 +71,12 @@ class FortifyServiceProvider extends ServiceProvider
                 'email' => ['ログイン情報が登録されていません'],
             ]);
         });
+
+        $this->app->instance(LogoutResponse::class, new class implements LogoutResponse {
+        public function toResponse($request)
+        {
+            return redirect()->route('login');
+        }
+    });
     }
 }
