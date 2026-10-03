@@ -9,6 +9,6 @@ class GenrePolicy
 {
         public function update(User $user, Genre $genre): bool
     {
-        return $user !== null;
+        return true;
     }
 }

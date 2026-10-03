@@ -18,7 +18,7 @@ class ReviewController extends Controller
             'comment' => $request->validated('comment'),
         ]);
 
-        return back()->with('status', 'レビューを投稿しました');
+        return back()->with('status', 'レビューを投稿しました。');
     }
 
     public function edit(Review $review)
@@ -35,7 +35,7 @@ class ReviewController extends Controller
         $review->update($request->validated());
 
         return redirect()->route('books.show', $review->book_id)
-            ->with('status', 'レビューを更新しました');
+            ->with('status', 'レビューを更新しました。');
     }
 
     public function destroy(Review $review)
@@ -44,6 +44,6 @@ class ReviewController extends Controller
 
         $review->delete();
 
-        return back()->with('status', 'レビューを削除しました');
+        return back()->with('status', 'レビューを削除しました。');
     }
 }

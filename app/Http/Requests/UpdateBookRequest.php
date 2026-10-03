@@ -22,7 +22,8 @@ class UpdateBookRequest extends FormRequest
      */
     public function rules(): array
     {
-        $bookId = $this->route('book')->id ?? $this->route('book');
+        $book = $this->route('book');
+        $bookId = $book instanceof \App\Models\Book ? $book->id : $book;
 
         return [
             'title'          => ['required', 'string', 'max:255'],
