@@ -9,7 +9,7 @@ class ReviewPolicy
 {
     public function create(User $user): bool
     {
-        return $user !== null;
+        return true;
     }
 
     public function update(User $user, Review $review): bool

@@ -26,7 +26,7 @@ class GenreController extends Controller
         Genre::create($request->validated());
 
         return redirect()->route('genres.index')
-            ->with('status', 'ジャンルを作成しました');
+            ->with('status', 'ジャンルを作成しました。');
     }
 
     public function show(Genre $genre)
@@ -50,18 +50,18 @@ class GenreController extends Controller
         $genre->update($request->validated());
 
         return redirect()->route('genres.index')
-            ->with('status', 'ジャンルを更新しました');
+            ->with('status', 'ジャンルを更新しました。');
     }
 
     public function destroy(Genre $genre)
     {
         if ($genre->books()->exists()) {
-            return back()->withErrors(['error' => '書籍が紐付いているため、このジャンルは削除できません。']);
+            return back()->withErrors(['error' => 'このジャンルには書籍が紐付いているため削除できません。']);
         }
 
         $genre->delete();
 
         return redirect()->route('genres.index')
-            ->with('status', 'ジャンルを削除しました');
+            ->with('status', 'ジャンルを削除しました。');
     }
 }

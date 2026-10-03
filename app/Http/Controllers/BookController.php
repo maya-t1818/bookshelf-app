@@ -111,7 +111,7 @@ class BookController extends Controller
         $book->delete();
 
         return redirect()->route('books.index')
-            ->with('status', '書籍を削除しました。');
+            ->with('status', '書籍情報を削除しました。');
     }
 }
 
