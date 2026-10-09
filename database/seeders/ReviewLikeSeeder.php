@@ -33,7 +33,7 @@ class ReviewLikeSeeder extends Seeder
 
             if ($likeCount > 0) {
                 $likerUserIds = $eligibleUsers->random($likeCount)->pluck('id');
-                $review->ReviewLikes()->syncWithoutDetaching($likerUserIds);
+                $review->reviewLikes()->syncWithoutDetaching($likerUserIds);
             }
         }
     }

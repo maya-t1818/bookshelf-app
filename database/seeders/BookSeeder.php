@@ -123,21 +123,21 @@ class BookSeeder extends Seeder
             ],
         ];
 
-        foreach ($books as $book) {
+        foreach ($books as $bookData) { 
             
             $book = Book::firstOrCreate(
-                ['isbn' => $book['isbn']], 
+                ['isbn' => $bookData['isbn']], 
                 [
                     'user_id' => $user->id,
-                    'title' => $book['title'],
-                    'author' => $book['author'],
-                    'published_date' => $book['published_date'],
-                    'description' => $book['description'],
-                    'image_url' => "https://placehold.co/200x300/e2e8f0/475569?text={$book['number']}",
+                    'title' => $bookData['title'],
+                    'author' => $bookData['author'],
+                    'published_date' => $bookData['published_date'], 
+                    'description' => $bookData['description'],
+                    'image_url' => "https://placehold.co/200x300/e2e8f0/475569?text={$bookData['number']}",
                 ]
             );
 
-            $genreIds = Genre::whereIn('name', $book['genres'])->pluck('id');
+            $genreIds = Genre::whereIn('name', $bookData['genres'])->pluck('id');
             $book->genres()->sync($genreIds);
         }
     }

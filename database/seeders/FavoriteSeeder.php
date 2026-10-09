@@ -25,7 +25,7 @@ class FavoriteSeeder extends Seeder
             $randomCount = rand(3, 5);
             $favoriteBookIds = $books->random(min($randomCount, $books->count()))->pluck('id');
 
-            $user->favorites()->syncWithoutDetaching($favoriteBookIds);
+            $user->favoritebooks()->syncWithoutDetaching($favoriteBookIds);
         }
     }
 }
