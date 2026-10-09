@@ -78,8 +78,8 @@ class BookController extends Controller
         DB::transaction(function () use ($book, $validated) {
             $book->update($validated);
 
-            if (isset($validated['genre_id'])) {
-                $book->genres()->sync((array) $validated['genre_id']);
+            if (isset($validated['genre_ids'])) {
+                $book->genres()->sync((array) $validated['genre_ids']);
             }
         });
 
