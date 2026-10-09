@@ -74,7 +74,19 @@ return [
     |
     */
 
-    'home' => RouteServiceProvider::HOME, 
+    'home' => '/books', 
+    /*
+    |--------------------------------------------------------------------------
+    | Redirects
+    |--------------------------------------------------------------------------
+    |
+    | Here you may specify custom redirect paths for various Fortify features.
+    |
+    */
+    'redirects' => [
+        'login' => '/books',
+        'logout' => '/',
+    ],
 
     /*
     |--------------------------------------------------------------------------
