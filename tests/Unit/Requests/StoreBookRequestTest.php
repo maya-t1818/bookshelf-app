@@ -3,8 +3,8 @@
 namespace Tests\Unit\Requests;
 
 use App\Http\Requests\StoreBookRequest;
-use App\Models\Genre;
 use App\Models\Book;
+use App\Models\Genre;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
@@ -15,7 +15,7 @@ class StoreBookRequestTest extends TestCase
 
     private function getRules(): array
     {
-        return (new StoreBookRequest())->rules();
+        return (new StoreBookRequest)->rules();
     }
 
     public function test_正常なデータでバリデーションが通過すること()
@@ -23,12 +23,12 @@ class StoreBookRequestTest extends TestCase
         $genre = Genre::factory()->create();
 
         $data = [
-            'title'        => 'テスト書籍',
-            'author'       => 'テスト著者',
-            'isbn'         => '1234567890123',
+            'title' => 'テスト書籍',
+            'author' => 'テスト著者',
+            'isbn' => '1234567890123',
             'published_date' => '2026-01-01',
-            'genres'    => [$genre->id],
-            'image_url'    => 'https://example.com/image.jpg',
+            'genres' => [$genre->id],
+            'image_url' => 'https://example.com/image.jpg',
         ];
 
         $validator = Validator::make($data, $this->getRules());

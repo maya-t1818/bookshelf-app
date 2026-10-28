@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Review;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class ReviewLikeSeeder extends Seeder
@@ -13,7 +12,6 @@ class ReviewLikeSeeder extends Seeder
      * Run the database seeds.
      */
     public function run(): void
-    
     {
         $reviews = Review::all();
         $allUsers = User::all();
@@ -33,7 +31,10 @@ class ReviewLikeSeeder extends Seeder
 
             if ($likeCount > 0) {
                 $likerUserIds = $eligibleUsers->random($likeCount)->pluck('id');
-                $review->reviewLikes()->syncWithoutDetaching($likerUserIds);
+                // 例: Review モデル側に `likedByUsers` というリレーションがある場合
+                foreach ($likerUserIds as $userId) {
+                    $review->likedByUsers()->attach($userId);
+                }
             }
         }
     }

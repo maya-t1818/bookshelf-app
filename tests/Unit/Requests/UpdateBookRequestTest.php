@@ -24,11 +24,11 @@ class UpdateBookRequestTest extends TestCase
         });
 
         $request = UpdateBookRequest::create("/test-books/{$book->id}", 'PUT', [
-            'title'          => '更新タイトル',
-            'author'         => '更新著者',
-            'isbn'           => '1234567890123', 
+            'title' => '更新タイトル',
+            'author' => '更新著者',
+            'isbn' => '1234567890123',
             'published_date' => '2026-01-01',
-            'genres'      => [$genre->id],
+            'genres' => [$genre->id],
         ]);
 
         $request->setContainer($this->app);

@@ -15,6 +15,8 @@ class BookResource extends JsonResource
             'author' => $this->author,
             'isbn' => $this->isbn,
             'description' => $this->description,
+            'image_url' => $this->image_url,
+            'published_date' => $this->published_date,
             'genres' => $this->genres->map(fn ($genre) => [
                 'id' => $genre->id,
                 'name' => $genre->name,

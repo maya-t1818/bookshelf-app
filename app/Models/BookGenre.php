@@ -17,11 +17,17 @@ class BookGenre extends Model
         'genre_id',
     ];
 
+    /**
+     * このBookGenreが属する書籍を取得
+     */
     public function book(): BelongsTo
     {
         return $this->belongsTo(Book::class);
     }
 
+    /**
+     * このBookGenreが属するジャンルを取得
+     */
     public function genre(): BelongsTo
     {
         return $this->belongsTo(Genre::class);

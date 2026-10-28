@@ -14,7 +14,7 @@ class StoreGenreRequestTest extends TestCase
 
     private function getRules(): array
     {
-        return (new StoreGenreRequest())->rules();
+        return (new StoreGenreRequest)->rules();
     }
 
     public function test_ジャンル名の重複時にバリデーションエラーとなること()

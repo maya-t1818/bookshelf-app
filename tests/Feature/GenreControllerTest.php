@@ -13,8 +13,8 @@ class GenreControllerTest extends TestCase
     use RefreshDatabase;
 
     /**
-    * @dataProvider unauthenticatedRouteProvider
-    */
+     * @dataProvider unauthenticatedRouteProvider
+     */
     public function test_未認証ユーザーは各種画面や処理にアクセスできずログイン画面へリダイレクトされること(string $method, string $routeName, bool $needModel = false)
     {
         $genre = $needModel ? Genre::factory()->create() : null;
@@ -28,17 +28,15 @@ class GenreControllerTest extends TestCase
     public static function unauthenticatedRouteProvider(): array
     {
         return [
-            '一覧画面'   => ['get', 'genres.index'],
-            '詳細画面'   => ['get', 'genres.show', true],
-            '作成画面'   => ['get', 'genres.create'],
-            '保存処理'   => ['post', 'genres.store'],
-            '編集画面'   => ['get', 'genres.edit', true],
-            '更新処理'   => ['put', 'genres.update', true],
-            '削除処理'   => ['delete', 'genres.destroy', true],
+            '一覧画面' => ['get', 'genres.index'],
+            '詳細画面' => ['get', 'genres.show', true],
+            '作成画面' => ['get', 'genres.create'],
+            '保存処理' => ['post', 'genres.store'],
+            '編集画面' => ['get', 'genres.edit', true],
+            '更新処理' => ['put', 'genres.update', true],
+            '削除処理' => ['delete', 'genres.destroy', true],
         ];
     }
-
-
 
     public function test_ログイン済みユーザーはジャンル一覧画面を表示できること()
     {
@@ -116,7 +114,7 @@ class GenreControllerTest extends TestCase
         $response->assertSessionHas('status', 'ジャンルを更新しました。');
 
         $this->assertDatabaseHas('genres', [
-            'id'   => $genre->id,
+            'id' => $genre->id,
             'name' => '新ジャンル名',
         ]);
     }

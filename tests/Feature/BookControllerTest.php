@@ -57,13 +57,13 @@ class BookControllerTest extends TestCase
         $genre = Genre::factory()->create();
 
         $data = [
-            'title'          => 'テスト書籍タイトル',
-            'author'         => 'テスト著者名',
-            'description'    => 'テストの概要です。',
-            'isbn'           => '1234567890123',
+            'title' => 'テスト書籍タイトル',
+            'author' => 'テスト著者名',
+            'description' => 'テストの概要です。',
+            'isbn' => '1234567890123',
             'published_date' => '2026-01-01',
-            'image_url'      => 'https://example.com/image.jpg',
-            'genres'         => [$genre->id],
+            'image_url' => 'https://example.com/image.jpg',
+            'genres' => [$genre->id],
         ];
 
         $response = $this->actingAs($user)->post(route('books.store'), $data);
@@ -73,8 +73,8 @@ class BookControllerTest extends TestCase
 
         $this->assertDatabaseHas('books', [
             'user_id' => $user->id,
-            'title'   => 'テスト書籍タイトル',
-            'isbn'    => '1234567890123',
+            'title' => 'テスト書籍タイトル',
+            'isbn' => '1234567890123',
         ]);
 
         $book = Book::where('title', 'テスト書籍タイトル')->first();
@@ -102,13 +102,13 @@ class BookControllerTest extends TestCase
         $book = Book::factory()->create(['user_id' => $owner->id]);
 
         $updateData = [
-            'title'          => '更新後タイトル',
-            'author'         => '更新後著者',
-            'description'    => '更新後の詳細文。',
-            'isbn'           => '1234567890123',
+            'title' => '更新後タイトル',
+            'author' => '更新後著者',
+            'description' => '更新後の詳細文。',
+            'isbn' => '1234567890123',
             'published_date' => '2026-01-01',
-            'image_url'      => 'https://example.com/new.jpg',
-            'genres'         => [$genre->id],
+            'image_url' => 'https://example.com/new.jpg',
+            'genres' => [$genre->id],
         ];
 
         $response = $this->actingAs($otherUser)->put(route('books.update', $book), $updateData);
@@ -119,7 +119,7 @@ class BookControllerTest extends TestCase
         $response->assertSessionHas('status', '書籍情報を更新しました。');
 
         $this->assertDatabaseHas('books', [
-            'id'    => $book->id,
+            'id' => $book->id,
             'title' => '更新後タイトル',
         ]);
     }

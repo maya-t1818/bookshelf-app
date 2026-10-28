@@ -78,15 +78,13 @@ class BookControllerApiTest extends TestCase
             'user_id' => $user->id,
             'title' => 'APIテスト本',
             'author' => 'テスト太郎',
-            'genre_ids' => [$genre->id], 
+            'genre_ids' => [$genre->id],
             'isbn' => '9784000000001',
             'published_date' => '2026-01-01',
             'description' => '登録テスト用の書籍概要です。',
-];
+        ];
 
         $response = $this->postJson(route('api.v1.books.store'), $data);
-
-
 
         $response->assertStatus(201)
             ->assertJsonPath('data.title', 'APIテスト本');

@@ -18,23 +18,35 @@ class Review extends Model
         'comment',
     ];
 
+    /**
+     * このレビューが属するユーザーを取得
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * このレビューが属する書籍を取得
+     */
     public function book(): BelongsTo
     {
         return $this->belongsTo(Book::class);
     }
 
+    /**
+     * このレビューをいいねしたユーザーを取得
+     */
     public function likedByUsers(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'review_likes')->withTimestamps();
+        return $this->belongsToMany(User::class, 'liked_reviews')->withTimestamps();
     }
 
-    public function reviewLikes(): BelongsToMany
+    /**
+     * このレビューをいいねしたユーザーを取得
+     */
+    public function likedReviews(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'review_likes')->withTimestamps();
+        return $this->belongsToMany(User::class, 'liked_reviews')->withTimestamps();
     }
 }

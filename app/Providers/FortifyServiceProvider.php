@@ -2,21 +2,21 @@
 
 namespace App\Providers;
 
-use App\Models\User;
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
+use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
-use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
-use Laravel\Fortify\Fortify;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Contracts\LogoutResponse;
+use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -52,12 +52,12 @@ class FortifyServiceProvider extends ServiceProvider
             return view('auth.register');
         });
         Fortify::authenticateUsing(function (Request $request) {
-            
+
             $request->validate([
-                'email'    => ['required'],
+                'email' => ['required'],
                 'password' => ['required'],
             ], [
-                'email.required'    => 'メールアドレスを入力してください',
+                'email.required' => 'メールアドレスを入力してください',
                 'password.required' => 'パスワードを入力してください',
             ]);
 
@@ -72,11 +72,12 @@ class FortifyServiceProvider extends ServiceProvider
             ]);
         });
 
-        $this->app->instance(LogoutResponse::class, new class implements LogoutResponse {
-        public function toResponse($request)
+        $this->app->instance(LogoutResponse::class, new class implements LogoutResponse
         {
-            return redirect()->route('login');
-        }
-    });
+            public function toResponse($request)
+            {
+                return redirect()->route('login');
+            }
+        });
     }
 }

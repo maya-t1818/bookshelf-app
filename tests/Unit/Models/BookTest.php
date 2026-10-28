@@ -39,7 +39,4 @@ class BookTest extends TestCase
 
         $this->assertTrue($book->reviews->contains($review));
     }
-
-    
-    
 }

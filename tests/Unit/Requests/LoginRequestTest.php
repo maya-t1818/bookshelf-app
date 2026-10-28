@@ -11,18 +11,18 @@ class LoginRequestTest extends TestCase
 
     public function test_メールとパスワードが未入力の場合のエラーメッセージ()
     {
-    $response = $this->post('/login', [
-        'email'    => '',
-        'password' => '',
-    ]);
+        $response = $this->post('/login', [
+            'email' => '',
+            'password' => '',
+        ]);
 
-    $response->assertSessionHasErrors(['email', 'password']);
+        $response->assertSessionHasErrors(['email', 'password']);
     }
 
     public function test_ログイン情報が不一致の場合のエラーメッセージ()
     {
         $response = $this->post('/login', [
-            'email'    => 'wrong@example.com',
+            'email' => 'wrong@example.com',
             'password' => 'wrongpassword',
         ]);
 

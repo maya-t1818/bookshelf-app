@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Book;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class FavoriteSeeder extends Seeder
@@ -25,7 +24,7 @@ class FavoriteSeeder extends Seeder
             $randomCount = rand(3, 5);
             $favoriteBookIds = $books->random(min($randomCount, $books->count()))->pluck('id');
 
-            $user->favoritebooks()->syncWithoutDetaching($favoriteBookIds);
+            $user->favoriteBooks()->syncWithoutDetaching($favoriteBookIds);
         }
     }
 }

@@ -3,7 +3,6 @@
 namespace Tests\Unit\Requests;
 
 use App\Http\Requests\StoreReviewRequest;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Validator;
 use Tests\TestCase;
 
@@ -11,7 +10,7 @@ class StoreReviewRequestTest extends TestCase
 {
     private function getRules(): array
     {
-        return (new StoreReviewRequest())->rules();
+        return (new StoreReviewRequest)->rules();
     }
 
     public function test_評価値が1から5の範囲内であれば通過すること()

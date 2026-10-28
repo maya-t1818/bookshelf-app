@@ -17,8 +17,8 @@ class FavoriteControllerTest extends TestCase
         $book = Book::factory()->create();
 
         $response = $this->actingAs($user)
-                        ->from(route('books.show', $book))
-                        ->post(route('favorites.toggle', $book));
+            ->from(route('books.show', $book))
+            ->post(route('favorites.toggle', $book));
 
         $response->assertRedirect(route('books.show', $book));
         $this->assertDatabaseHas('favorites', [
@@ -27,8 +27,8 @@ class FavoriteControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)
-                        ->from(route('books.show', $book))
-                        ->post(route('favorites.toggle', $book));
+            ->from(route('books.show', $book))
+            ->post(route('favorites.toggle', $book));
 
         $response->assertRedirect(route('books.show', $book));
         $this->assertDatabaseMissing('favorites', [
@@ -37,8 +37,8 @@ class FavoriteControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs($user)
-                        ->from(route('books.show', $book))
-                        ->post(route('favorites.toggle', $book));
+            ->from(route('books.show', $book))
+            ->post(route('favorites.toggle', $book));
 
         $response->assertRedirect(route('books.show', $book));
         $this->assertDatabaseHas('favorites', [

@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Book;
 use App\Models\Genre;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class BookSeeder extends Seeder
@@ -15,9 +14,10 @@ class BookSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::first();
+        // 全ユーザーを取得する（ユーザーが存在しない場合は処理を中断）
+        $users = User::all();
 
-        if (!$user) {
+        if ($users->isEmpty()) {
             return;
         }
 
@@ -123,15 +123,15 @@ class BookSeeder extends Seeder
             ],
         ];
 
-        foreach ($books as $bookData) { 
-            
+        foreach ($books as $bookData) {
+
             $book = Book::firstOrCreate(
-                ['isbn' => $bookData['isbn']], 
+                ['isbn' => $bookData['isbn']],
                 [
-                    'user_id' => $user->id,
+                    'user_id' => $users->random()->id,
                     'title' => $bookData['title'],
                     'author' => $bookData['author'],
-                    'published_date' => $bookData['published_date'], 
+                    'published_date' => $bookData['published_date'],
                     'description' => $bookData['description'],
                     'image_url' => "https://placehold.co/200x300/e2e8f0/475569?text={$bookData['number']}",
                 ]

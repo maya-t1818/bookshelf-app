@@ -3,7 +3,6 @@
 namespace Tests\Unit\Models;
 
 use App\Models\Book;
-use App\Models\Favorite;
 use App\Models\Review;
 use App\Models\ReviewLike;
 use App\Models\User;

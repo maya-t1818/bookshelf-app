@@ -17,32 +17,32 @@ class ReviewLikeControllerTest extends TestCase
         $review = Review::factory()->create();
 
         $response = $this->actingAs($user)
-                        ->from(route('books.show', $review->book_id))
-                        ->post(route('reviews.like', $review));
+            ->from(route('books.show', $review->book_id))
+            ->post(route('reviews.like', $review));
 
         $response->assertRedirect();
         $this->assertDatabaseHas('review_likes', [
-            'user_id'   => $user->id,
+            'user_id' => $user->id,
             'review_id' => $review->id,
         ]);
 
         $response = $this->actingAs($user)
-                        ->from(route('books.show', $review->book_id))
-                        ->post(route('reviews.like', $review));
+            ->from(route('books.show', $review->book_id))
+            ->post(route('reviews.like', $review));
 
         $response->assertRedirect();
         $this->assertDatabaseMissing('review_likes', [
-            'user_id'   => $user->id,
+            'user_id' => $user->id,
             'review_id' => $review->id,
         ]);
 
         $response = $this->actingAs($user)
-                        ->from(route('books.show', $review->book_id))
-                        ->post(route('reviews.like', $review));
+            ->from(route('books.show', $review->book_id))
+            ->post(route('reviews.like', $review));
 
         $response->assertRedirect();
         $this->assertDatabaseHas('review_likes', [
-            'user_id'   => $user->id,
+            'user_id' => $user->id,
             'review_id' => $review->id,
         ]);
     }

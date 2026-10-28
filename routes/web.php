@@ -1,12 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
-use App\Http\Controllers\GenreController;
-use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\GenreController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RankingController;
+use App\Http\Controllers\ReadingPlanController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ReviewLikeController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,7 +17,7 @@ use App\Http\Controllers\ReviewLikeController;
 |--------------------------------------------------------------------------
 */
 
-// 書籍一覧 
+// 書籍一覧
 Route::get('/', [BookController::class, 'index'])->name('books.index');
 Route::get('/books', [BookController::class, 'index']);
 
@@ -23,9 +26,13 @@ Route::get('/ranking', [RankingController::class, 'index'])->name('ranking.index
 
 // 認証必須
 Route::middleware(['auth'])->group(function () {
-    
+
     // 書籍
     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
+
+    // 書籍登録画面のISBN非同期検索
+    Route::get('/books/isbn/{isbn}', [BookController::class, 'searchByIsbn'])->name('books.searchByIsbn');
+
     Route::post('/books', [BookController::class, 'store'])->name('books.store');
     Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
     Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update');
@@ -52,7 +59,26 @@ Route::middleware(['auth'])->group(function () {
 
     // レビューのいいね
     Route::post('/reviews/{review}/like', [ReviewLikeController::class, 'toggle'])->name('reviews.like');
+
+    // 読書統計・レポート画面
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+
+    // 読書計画関連
+    Route::get('/reading-plans', [ReadingPlanController::class, 'index'])->name('reading-plans.index');
+    Route::get('/reading-plans/create', [ReadingPlanController::class, 'create'])->name('reading-plans.create');
+    Route::post('/reading-plans', [ReadingPlanController::class, 'store'])->name('reading-plans.store');
+    Route::post('/reading-plans/{readingPlan}/complete', [ReadingPlanController::class, 'complete'])->name('reading-plans.complete');
+    Route::get('/reading-plans/{readingPlan}/edit', [ReadingPlanController::class, 'edit'])->name('reading-plans.edit');
+    Route::put('/reading-plans/{readingPlan}', [ReadingPlanController::class, 'update'])->name('reading-plans.update');
+    Route::delete('/reading-plans/{readingPlan}', [ReadingPlanController::class, 'destroy'])->name('reading-plans.destroy');
+
+    // 通知関連
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
 });
 
 // 書籍詳細
 Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
+
+// ISBNで書籍情報を取得するAPI用ルート
+Route::get('/books/isbn/{isbn}', [BookController::class, 'searchByIsbn']);

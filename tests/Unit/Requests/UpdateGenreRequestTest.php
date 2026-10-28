@@ -22,7 +22,7 @@ class UpdateGenreRequestTest extends TestCase
         });
 
         $request = UpdateGenreRequest::create("/test-genres/{$genre->id}", 'PUT', [
-            'name' => 'SF', 
+            'name' => 'SF',
         ]);
 
         $request->setContainer($this->app);

@@ -13,14 +13,14 @@ class RegisterRequestTest extends TestCase
 
     public function test_未入力や不整合時に指定したカスタムメッセージが返ること()
     {
-        $action = new CreateNewUser();
+        $action = new CreateNewUser;
 
         try {
             $action->create([
-                'name'                  => '',
-                'email'                 => 'invalid-email',
-                'password'              => '1234567', 
-                'password_confirmation' => '1234568', 
+                'name' => '',
+                'email' => 'invalid-email',
+                'password' => '1234567',
+                'password_confirmation' => '1234568',
             ]);
             $this->fail('ValidationExceptionが発生しませんでした');
         } catch (ValidationException $e) {

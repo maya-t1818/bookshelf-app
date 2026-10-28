@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\User;
-use App\Models\Genre;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class BookFactory extends Factory
@@ -11,10 +10,10 @@ class BookFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id'        => User::factory(),
-            'title'          => $this->faker->sentence(3),
-            'author'         => $this->faker->name(),
-            'isbn'           => $this->faker->unique()->isbn13(),
+            'user_id' => User::factory(),
+            'title' => $this->faker->sentence(3),
+            'author' => $this->faker->name(),
+            'isbn' => $this->faker->unique()->isbn13(),
             'published_date' => $this->faker->date(),
         ];
     }
