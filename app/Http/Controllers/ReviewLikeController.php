@@ -17,7 +17,7 @@ class ReviewLikeController extends Controller
      */
     public function toggle(Request $request, Review $review): RedirectResponse
     {
-        $request->user()->LikedReviews()->toggle($review->id);
+        $request->user()->likedByUsers()->toggle($review->id);
 
         return back();
     }

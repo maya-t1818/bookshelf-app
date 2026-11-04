@@ -37,7 +37,6 @@ class StoreBookRequest extends FormRequest
             'genre_ids' => ['required', 'array', 'min:1'],
             'genre_ids.*' => ['exists:genres,id'],
             'image_url' => ['nullable', 'url'],
-            'user_id' => ['required', 'integer', 'exists:users,id'],
         ];
     }
 
@@ -62,7 +61,6 @@ class StoreBookRequest extends FormRequest
             'genre_ids.min' => 'ジャンルは1つ以上選択してください。',
             'image_url.url' => '画像URLは有効なURL形式で入力してください。',
             'image_url.max' => '画像URLは255文字以内で入力してください。',
-            'user_id.required' => '登録者IDは必須です。',
         ];
     }
 }

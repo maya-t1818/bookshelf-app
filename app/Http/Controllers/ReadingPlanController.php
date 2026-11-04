@@ -7,16 +7,11 @@ use App\Http\Requests\StoreReadingPlanRequest;
 use App\Http\Requests\UpdateReadingPlanRequest;
 use App\Models\Book;
 use App\Models\ReadingPlan;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
 
 class ReadingPlanController extends Controller
 {
-    /**
-     * 認証済みユーザーのみアクセス可能にする
-     */
     public function __construct()
     {
         $this->middleware('auth');
@@ -24,14 +19,16 @@ class ReadingPlanController extends Controller
 
     /**
      * ログインユーザーの読書計画一覧を表示する
-     *
-     * @param  Request  $request  リクエストインスタンス
-     * @return View 読書計画一覧ビュー
      */
     public function index(Request $request)
     {
         $user = Auth::user();
         $currentStatus = $request->input('status');
+
+        ReadingPlan::where('user_id', $user->id)
+            ->where('status', ReadingPlanStatus::InProgress)
+            ->whereDate('target_date', '<', now()->toDateString())
+            ->update(['status' => ReadingPlanStatus::Expired]);
 
         $query = ReadingPlan::with('book')
             ->where('user_id', $user->id);
@@ -48,8 +45,6 @@ class ReadingPlanController extends Controller
 
     /**
      * 書籍プルダウンと期日入力フォームを表示する
-     *
-     * @return View 書籍プルダウンと期日入力フォームビュー
      */
     public function create()
     {
@@ -60,9 +55,6 @@ class ReadingPlanController extends Controller
 
     /**
      * 読書計画を新規保存する
-     *
-     * @param  StoreReadingPlanRequest  $request  リクエストインスタンス
-     * @return RedirectResponse 読書計画一覧へのリダイレクトレスポンス
      */
     public function store(StoreReadingPlanRequest $request)
     {
@@ -79,37 +71,28 @@ class ReadingPlanController extends Controller
     }
 
     /**
-     * 読書計画を「読了」にする
-     *
-     * @param  ReadingPlan  $readingPlan  読書計画モデルインスタンス
-     * @return RedirectResponse 読書計画一覧へのリダイレクトレスポンス
+     * 読書計画を「完了」にする
      */
     public function complete(ReadingPlan $readingPlan)
     {
-        // 認可チェック
         if ($readingPlan->user_id !== Auth::id()) {
             abort(403);
         }
 
-        // ステータスを「読了（Completed）」に変更し、完了日に現在日時を記録
         $readingPlan->update([
             'status' => ReadingPlanStatus::Completed,
             'completed_at' => now(),
         ]);
 
         return redirect()->route('reading-plans.index')
-            ->with('success', '本を読了にしました。');
+            ->with('success', '読書計画を完了にしました。');
     }
 
     /**
      * 期日変更フォームを表示する
-     *
-     * @param  ReadingPlan  $readingPlan  読書計画モデルインスタンス
-     * @return View 期日変更フォームビュー
      */
     public function edit(ReadingPlan $readingPlan)
     {
-        // 認可チェック
         if ($readingPlan->user_id !== Auth::id()) {
             abort(403);
         }
@@ -119,23 +102,22 @@ class ReadingPlanController extends Controller
 
     /**
      * 読書計画の期日を更新する
-     *
-     * @param  UpdateReadingPlanRequest  $request  リクエストインスタンス
-     * @param  ReadingPlan  $readingPlan  読書計画モデルインスタンス
-     * @return RedirectResponse 読書計画一覧へのリダイレクトレスポンス
      */
     public function update(UpdateReadingPlanRequest $request, ReadingPlan $readingPlan)
     {
-        // 認可チェック
         if ($readingPlan->user_id !== Auth::id()) {
             abort(403);
         }
 
         $validated = $request->validated();
+        $newTargetDate = $validated['target_date'];
 
-        $readingPlan->update([
-            'target_date' => $validated['target_date'],
-        ]);
+        $updateData = ['target_date' => $newTargetDate];
+        if ($readingPlan->status === ReadingPlanStatus::Expired && $newTargetDate >= now()->toDateString()) {
+            $updateData['status'] = ReadingPlanStatus::InProgress;
+        }
+
+        $readingPlan->update($updateData);
 
         return redirect()->route('reading-plans.index')
             ->with('success', '読書計画を更新しました。');
@@ -143,13 +125,9 @@ class ReadingPlanController extends Controller
 
     /**
      * 読書計画を削除する
-     *
-     * @param  ReadingPlan  $readingPlan  読書計画モデルインスタンス
-     * @return RedirectResponse 読書計画一覧へのリダイレクトレスポンス
      */
     public function destroy(ReadingPlan $readingPlan)
     {
-        // 認可チェック
         if ($readingPlan->user_id !== Auth::id()) {
             abort(403);
         }

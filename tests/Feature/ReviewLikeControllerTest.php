@@ -21,7 +21,7 @@ class ReviewLikeControllerTest extends TestCase
             ->post(route('reviews.like', $review));
 
         $response->assertRedirect();
-        $this->assertDatabaseHas('review_likes', [
+        $this->assertDatabaseHas('liked_reviews', [
             'user_id' => $user->id,
             'review_id' => $review->id,
         ]);
@@ -31,7 +31,7 @@ class ReviewLikeControllerTest extends TestCase
             ->post(route('reviews.like', $review));
 
         $response->assertRedirect();
-        $this->assertDatabaseMissing('review_likes', [
+        $this->assertDatabaseMissing('liked_reviews', [
             'user_id' => $user->id,
             'review_id' => $review->id,
         ]);
@@ -41,7 +41,7 @@ class ReviewLikeControllerTest extends TestCase
             ->post(route('reviews.like', $review));
 
         $response->assertRedirect();
-        $this->assertDatabaseHas('review_likes', [
+        $this->assertDatabaseHas('liked_reviews', [
             'user_id' => $user->id,
             'review_id' => $review->id,
         ]);

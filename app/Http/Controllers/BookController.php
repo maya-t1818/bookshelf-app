@@ -82,7 +82,7 @@ class BookController extends Controller
         $book->load([
             'genres',
             'reviews.user',
-            'reviews.likedByUsers',
+            'reviews.likedReviews',
         ])->loadCount(['favoritedByUsers']);
 
         return view('books.show', compact('book'));

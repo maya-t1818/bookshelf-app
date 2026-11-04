@@ -17,11 +17,12 @@ class ReviewLikeTest extends TestCase
         $review = Review::factory()->create();
 
         $response = $this->actingAs($user)
+            ->from(route('books.show', $review->book_id))
             ->post(route('reviews.like', $review));
 
-        $response->assertRedirect();
+        $response->assertRedirect(route('books.show', $review->book_id));
 
-        $this->assertDatabaseHas('review_likes', [
+        $this->assertDatabaseHas('liked_reviews', [
             'user_id' => $user->id,
             'review_id' => $review->id,
         ]);
@@ -32,14 +33,14 @@ class ReviewLikeTest extends TestCase
         $user = User::factory()->create();
         $review = Review::factory()->create();
 
-        $user->likedReviews()->attach($review->id);
+        $user->likedByUsers()->attach($review->id);
 
         $response = $this->actingAs($user)
             ->post(route('reviews.like', $review));
 
         $response->assertRedirect();
 
-        $this->assertDatabaseMissing('review_likes', [
+        $this->assertDatabaseMissing('liked_reviews', [
             'user_id' => $user->id,
             'review_id' => $review->id,
         ]);

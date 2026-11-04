@@ -45,10 +45,20 @@ class User extends Authenticatable
     }
 
     /**
-     * ユーザーがいいねしたレビューを取得
+     * ユーザーがいいねしているレビュー一覧
      */
     public function likedReviews(): BelongsToMany
     {
-        return $this->belongsToMany(Review::class, 'liked_reviews')->withTimestamps();
+        return $this->belongsToMany(Review::class, 'liked_reviews', 'user_id', 'review_id')
+            ->withTimestamps();
+    }
+
+    /**
+     * 相互用のリレーションを定義するためのメソッド
+     */
+    public function likedByUsers(): BelongsToMany
+    {
+        return $this->belongsToMany(Review::class, 'liked_reviews', 'user_id', 'review_id')
+            ->withTimestamps();
     }
 }

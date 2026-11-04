@@ -4,7 +4,6 @@ namespace Tests\Unit\Models;
 
 use App\Models\Book;
 use App\Models\Review;
-use App\Models\ReviewLike;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -46,8 +45,9 @@ class UserTest extends TestCase
     {
         $user = User::factory()->create();
         $review = Review::factory()->create();
-        ReviewLike::factory()->create(['user_id' => $user->id, 'review_id' => $review->id]);
 
-        $this->assertTrue($user->likedReviews->contains($review));
+        $user->likedByUsers()->attach($review->id);
+
+        $this->assertTrue($user->likedByUsers->contains($review));
     }
 }

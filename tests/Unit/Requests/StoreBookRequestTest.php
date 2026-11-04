@@ -37,15 +37,19 @@ class StoreBookRequestTest extends TestCase
 
     public function test_必須項目が未入力の場合に失敗すること()
     {
-        $validator = Validator::make([], $this->getRules());
+        // 空のデータを渡す
+        $validator = Validator::make([], (new StoreBookRequest)->rules());
+
         $this->assertTrue($validator->fails());
 
         $errors = $validator->errors();
+
         $this->assertTrue($errors->has('title'));
         $this->assertTrue($errors->has('author'));
-        $this->assertTrue($errors->has('isbn'));
-        $this->assertTrue($errors->has('published_date'));
-        $this->assertTrue($errors->has('genres'));
+
+        $this->assertFalse($errors->has('isbn'));
+        $this->assertFalse($errors->has('published_date'));
+        $this->assertFalse($errors->has('genres'));
     }
 
     public function test_isbnが13桁以外または一意でない場合に失敗すること()

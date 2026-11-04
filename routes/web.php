@@ -27,13 +27,11 @@ Route::get('/ranking', [RankingController::class, 'index'])->name('ranking.index
 // 認証必須
 Route::middleware(['auth'])->group(function () {
 
-    // 書籍
+    // 書籍関連
     Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
-
-    // 書籍登録画面のISBN非同期検索
     Route::get('/books/isbn/{isbn}', [BookController::class, 'searchByIsbn'])->name('books.searchByIsbn');
-
     Route::post('/books', [BookController::class, 'store'])->name('books.store');
+
     Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit');
     Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update');
     Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy');
@@ -79,6 +77,3 @@ Route::middleware(['auth'])->group(function () {
 
 // 書籍詳細
 Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show');
-
-// ISBNで書籍情報を取得するAPI用ルート
-Route::get('/books/isbn/{isbn}', [BookController::class, 'searchByIsbn']);

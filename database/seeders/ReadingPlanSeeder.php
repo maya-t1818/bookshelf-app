@@ -24,7 +24,6 @@ class ReadingPlanSeeder extends Seeder
             return;
         }
 
-        // book_id は計画ごとに異なる書籍を割り当てる（重複制御対策）
         $plans = [
             // 山田太郎（主要シナリオ集約、ID 1〜5）
             [
@@ -73,8 +72,6 @@ class ReadingPlanSeeder extends Seeder
             ],
         ];
 
-        foreach ($plans as $planData) {
-            ReadingPlan::create($planData);
-        }
+        collect($plans)->each(fn ($planData) => ReadingPlan::create($planData));
     }
 }

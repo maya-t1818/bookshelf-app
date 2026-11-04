@@ -84,7 +84,7 @@ class BookControllerApiTest extends TestCase
             'description' => '登録テスト用の書籍概要です。',
         ];
 
-        $response = $this->postJson(route('api.v1.books.store'), $data);
+        $response = $this->actingAs($user)->postJson(route('api.v1.books.store'), $data);
 
         $response->assertStatus(201)
             ->assertJsonPath('data.title', 'APIテスト本');
@@ -98,7 +98,9 @@ class BookControllerApiTest extends TestCase
     {
         $genre = Genre::factory()->create();
         $user = User::factory()->create();
+
         $book = Book::factory()->create([
+            'user_id' => $user->id,
             'title' => '更新前タイトル',
             'isbn' => '9784000000001',
         ]);
@@ -113,7 +115,7 @@ class BookControllerApiTest extends TestCase
             'description' => '内容を修正しました。',
         ];
 
-        $response = $this->putJson(route('api.v1.books.update', $book->id), $updateData);
+        $response = $this->actingAs($user)->putJson(route('api.v1.books.update', $book->id), $updateData);
 
         $response->assertStatus(200)
             ->assertJsonPath('data.title', '更新後タイトル');
@@ -121,10 +123,15 @@ class BookControllerApiTest extends TestCase
 
     public function test_書籍を削除できること()
     {
-        $book = Book::factory()->create();
+        $user = User::factory()->create();
+
+        $book = Book::factory()->create([
+            'user_id' => $user->id,
+        ]);
+
         Review::factory()->create(['book_id' => $book->id]);
 
-        $response = $this->deleteJson(route('api.v1.books.destroy', $book->id));
+        $response = $this->actingAs($user)->deleteJson(route('api.v1.books.destroy', $book->id));
 
         $response->assertStatus(204);
         $this->assertDatabaseMissing('books', ['id' => $book->id]);

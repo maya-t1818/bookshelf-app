@@ -4,9 +4,9 @@ namespace App\Enums;
 
 enum ReadingPlanStatus: string
 {
-    case Planned = 'planned';    // 計画中
-    case InProgress = 'in_progress';    // 読書中
-    case Completed = 'completed';    // 読了
+    case InProgress = 'in_progress';
+    case Completed = 'completed';
+    case Expired = 'expired';
 
     /**
      * 日本語のラベルを返す
@@ -14,21 +14,18 @@ enum ReadingPlanStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::Planned => '計画中',
-            self::InProgress => '読書中',
-            self::Completed => '読了',
+            self::InProgress => '進行中',
+            self::Completed => '完了',
+            self::Expired => '期限切れ',
         };
     }
 
-    /**
-     * ステータスに応じたTailwindのCSSクラスを返す
-     */
     public function badgeClass(): string
     {
         return match ($this) {
-            self::Planned => 'bg-gray-100 text-gray-800',
-            self::InProgress => 'bg-yellow-100 text-yellow-800',
+            self::InProgress => 'bg-blue-100 text-blue-800',
             self::Completed => 'bg-green-100 text-green-800',
+            self::Expired => 'bg-red-100 text-red-800',
         };
     }
 }

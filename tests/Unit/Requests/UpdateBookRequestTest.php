@@ -17,6 +17,7 @@ class UpdateBookRequestTest extends TestCase
     public function test_自身のisbnのままでも更新バリデーションが通過すること()
     {
         $genre = Genre::factory()->create();
+        // あらかじめ特定のISBNで本を作成する
         $book = Book::factory()->create(['isbn' => '9784123456789']);
 
         Route::put('/test-books/{book}', function (UpdateBookRequest $request) {
@@ -26,7 +27,7 @@ class UpdateBookRequestTest extends TestCase
         $request = UpdateBookRequest::create("/test-books/{$book->id}", 'PUT', [
             'title' => '更新タイトル',
             'author' => '更新著者',
-            'isbn' => '1234567890123',
+            'isbn' => '9784123456789',
             'published_date' => '2026-01-01',
             'genres' => [$genre->id],
         ]);
@@ -38,6 +39,8 @@ class UpdateBookRequestTest extends TestCase
         $request->setRouteResolver(fn () => $route);
 
         $validator = Validator::make($request->all(), $request->rules());
+
+        // 自分のIDが unique の除外（ignore）対象になっているため、重複エラーにならず通る
         $this->assertTrue($validator->passes());
     }
 }

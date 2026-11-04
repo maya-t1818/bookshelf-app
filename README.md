@@ -1,66 +1,338 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# BookShelf 書籍レビューアプリ
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+書籍レビューをアプリを実装したLaravelプロジェクトです。
+一般ユーザは書籍一覧等一部のみ閲覧可能。
+会員登録、ログイン後、書籍の登録、レビュー、いいね機能に加え
+ランキング、マイレポート、読書計画機能も使用することができる。
 
-## About Laravel
+## 作成者
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+竹内　麻耶
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 使用技術
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP 8.5
+- Laravel 10.x
+- MySQL 8.4
+- Nginx
+- Docker / Docker Compose / Laravel Sail
+- Vite / Tailwind CSS 3.4
+- Laravel Fortify（認証）
+- phpMyAdmin
 
-## Learning Laravel
+## ER図
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+erDiagram
+    users ||--o{ books : "登録する"
+    users ||--o{ reviews : "投稿する"
+    users ||--o{ favorites : "お気に入り登録"
+    users ||--o{ liked_reviews : "いいねする"
+    users ||--o{ reading_plans : "計画を作成する"
+    users ||--o{ notifications : "通知を受け取る"
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+    books ||--o{ book_genre : "持つ"
+    genres ||--o{ book_genre : "含まれる"
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+    books ||--o{ reviews : "レビューされる"
+    books ||--o{ favorites : "お気に入り対象"
+    books ||--o{ reading_plans : "計画対象となる"
 
-## Laravel Sponsors
+    reviews ||--o{ liked_reviews : "いいねされる"
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+    users {
+        bigint id PK
+        string name
+        string email
+        timestamp email_verified_at
+        string password
+        string remember_token
+        timestamp created_at
+        timestamp updated_at
+    }
 
-### Premium Partners
+    genres {
+        bigint id PK
+        string name
+        timestamp created_at
+        timestamp updated_at
+    }
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+    books {
+        bigint id PK
+        bigint user_id FK
+        string title
+        string author
+        string isbn UK
+        date published_at
+        text description
+        string image_url
+        timestamp created_at
+        timestamp updated_at
+    }
 
-## Contributing
+    book_genre {
+        bigint id PK
+        bigint book_id FK
+        bigint genre_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+    reviews {
+        bigint id PK
+        bigint user_id FK
+        bigint book_id FK
+        tinyint rating
+        text comment
+        timestamp created_at
+        timestamp updated_at
+    }
 
-## Code of Conduct
+    favorites {
+        bigint id PK
+        bigint user_id FK
+        bigint book_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+    liked_reviews {
+        bigint id PK
+        bigint user_id FK
+        bigint review_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
 
-## Security Vulnerabilities
+    reading_plans {
+        bigint id PK
+        bigint user_id FK
+        bigint book_id FK
+        date target_date
+        string status
+        timestamp created_at
+        timestamp updated_at
+    }
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+    notifications {
+        uuid id PK
+        string type
+        string notifiable_type
+        bigint notifiable_id
+        text data
+        timestamp read_at
+        timestamp created_at
+        timestamp updated_at
+    }
 
-## License
+## 開発環境URL
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+http://localhost
+
+## 動作環境
+
+- Docker
+- Docker Compose
+
+
+## 環境構築手順
+
+1. **Laravel 10.xプロジェクトを作成**
+
+    ```bash
+    docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd):/var/www/html" -w /var/www/html -e COMPOSER_CACHE_DIR=/tmp/composer_cache laravelsail/php82-composer:latest composer create-project laravel/laravel:^10.0 bookshelf-app
+    ```
+
+2. **.envファイルの準備**
+
+    `.env.example` をコピーして `.env` を作成します。
+
+    ```bash
+    cp .env.example .env
+    ```
+
+    `.env` ファイル内の以下のDB接続情報を確認・設定します。`.env.example` のデフォルト値はSail向けではないため、以下のように変更してください。
+
+    ```ini
+    DB_CONNECTION=mysql
+    DB_HOST=mysql
+    DB_PORT=3306
+    DB_DATABASE=laravel
+    DB_USERNAME=sail
+    DB_PASSWORD=password
+
+    重要: DB_HOST は localhost や 127.0.0.1 ではなく、Dockerコンテナ名である mysql を指定します。
+    ```
+
+3. **Laravel Sailをインストール**
+
+    ```bash
+    docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v "$(pwd):/var/www/html" \
+    -w /var/www/html \
+    -e COMPOSER_CACHE_DIR=/tmp/composer_cache \
+    laravelsail/php82-composer:latest \
+    composer require laravel/sail --dev
+    ```
+
+4. **設定ファイルの生成**
+
+    ```bash
+    docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v "$(pwd):/var/www/html" \
+    -w /var/www/html \
+    -e COMPOSER_CACHE_DIR=/tmp/composer_cache \
+    laravelsail/php82-composer:latest \
+    php artisan sail:install --with=mysql
+    ```
+
+5. **Laravel Sailの起動**
+
+    以下のコマンドでDockerコンテナを起動します。
+
+    ```bash
+    ./vendor/bin/sail up -d
+    ```
+
+    > **エイリアスの設定（推奨）**
+    >
+    > 毎回 `./vendor/bin/sail` と入力するのは手間なので、エイリアスを設定すると便利です。
+    >
+    > ```bash
+    > alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
+    > ```
+
+6. **アプリケーションキーの生成**
+
+    ```bash
+    sail artisan key:generate
+    ```
+
+7. **データベースのマイグレーションと初期データ投入**
+
+    以下のコマンドでテーブルを作成し、ダミーデータを投入します。
+
+    ```bash
+    sail artisan migrate:fresh --seed
+    ```
+    このコマンドの入力後、下記のエラーが表示されることがあります。
+    ```bash
+       Illuminate\Database\QueryException 
+      SQLSTATE[HY000] [1044] Access denied for user 'sail'@'%' to database 'contact-form-app' (Connection: mysql, SQL: select table_name as `name`,         (data_length + index_length) as `size`, table_comment as `comment`, engine as `engine`, table_collation as `collation` from information_schema.tables where table_schema = 'contact-form-app' and table_type in ('BASE TABLE', 'SYSTEM VERSIONED') order by table_name)
+
+      at vendor/laravel/framework/src/Illuminate/Database/Connection.php:829
+        825▕                     $this->getName(), $query, $this->prepareBindings($bindings), $e
+        826▕                 );
+        827▕             }
+        828▕ 
+      ➜ 829▕             throw new QueryException(
+        830▕                 $this->getName(), $query, $this->prepareBindings($bindings), $e
+        831▕             );
+        832▕         }
+        833▕     }
+
+      +43 vendor frames 
+
+      44  artisan:35
+          Illuminate\Foundation\Console\Kernel::handle()
+    ```
+    このエラーはコンテナ内にデータが残っており、エラーが生じているケースなどがあります。
+    その場合は、以下のコマンドを順に実行して各コンテナを再起動して下さい。
+    ```Bash
+    sail down -v
+    sail up -d　//コマンド実行後にSQLコンテナが立ち上がるまで時間がかかります。30秒ほどお待ちください。
+    sail artisan migrate:fresh --seed
+    ```
+    
+8. **フロントエンドのビルド**
+
+    ```bash
+    sail npm install
+    sail npm install alpinejs
+    sail npm install -D tailwindcss@^3.4.0 @tailwindcss/forms postcss autoprefixer
+    sail npx tailwindcss init -p
+    tailwind.config.js を以下の内容で上書きしてください：
+    import defaultTheme from 'tailwindcss/defaultTheme';
+    import forms from '@tailwindcss/forms';
+
+    /** @type {import('tailwindcss').Config} */
+    export default {
+    content: [
+        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+        './storage/framework/views/*.php',
+        './resources/views/**/*.blade.php',
+    ],
+    theme: {
+        extend: {
+            fontFamily: {
+                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+            },
+        },
+    },
+    plugins: [forms],
+    };
+
+    sail npm run dev
+    ```
+
+    `npm run dev` は開発中は起動したままにしてください。
+
+9. **phpMyAdminの追加**
+
+    compose.yaml を開き、mysql サービスの後に以下の設定を追加してください。
+
+    phpmyadmin:
+        image: 'phpmyadmin:latest'
+        ports:
+            - '${FORWARD_PHPMYADMIN_PORT:-8080}:80'
+        environment:
+            PMA_HOST: mysql
+            PMA_USER: '${DB_USERNAME}'
+            PMA_PASSWORD: '${DB_PASSWORD}'
+        networks:
+            - sail
+        depends_on:
+            - mysql
+
+10. **アプリケーションへのアクセス**
+
+    ブラウザで [http://localhost](http://localhost) にアクセスします。
+
+## テスト実行
+
+```bash
+sail artisan test
+```
+
+カバレッジ付きで実行する場合:
+
+```bash
+sail artisan test --coverage
+```
+
+## 機能一覧
+
+- ユーザ認証（登録・ログイン・ログアウト）
+- 書籍（一覧・詳細・登録・編集・削除）検索
+- レビュー（一覧・詳細・登録・編集・削除）
+- ジャンル（一覧・詳細・登録・編集・削除）
+- お気に入り一覧
+- ランキング一覧
+- マイ読書レポート
+- 読書計画
+- 通知機能
+- 公開API
+
+## APIエンドポイント一覧
+
+認証不要の公開APIです。全エンドポイントは `/api/v1` プレフィックス配下に定義されています。
+
+| HTTPメソッド | URI | 概要 |
+|---|---|---|
+| GET |	/api/v1/books | 書籍一覧を取得する
+| GET |	/api/v1/books/{book} | 書籍詳細を取得する
+| POST | /api/v1/books | 書籍を新規登録する
+| PUT | /api/v1/books/{book} | 書籍を更新する
+| DELETE | /api/v1/books/{book} | 書籍を削除する

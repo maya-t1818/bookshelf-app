@@ -2,29 +2,25 @@
 
 namespace App\Console\Commands;
 
+use App\Models\User;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class SendBookReminderCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'app:send-book-reminder-command';
+    protected $signature = 'books:send-reminder';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Command description';
+    protected $description = 'ユーザーに未読本の読書リマインダーを送信する';
 
-    /**
-     * Execute the console command.
-     */
-    public function handle()
+    public function handle(): int
     {
-        //
+        User::has('books')->get()->each(function ($user) {
+
+            Log::info("リマインダー送信: {$user->email}");
+        });
+
+        $this->info('読書リマインダーの送信が完了しました。');
+
+        return Command::SUCCESS;
     }
 }

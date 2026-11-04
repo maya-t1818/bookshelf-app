@@ -53,21 +53,13 @@ class BookController extends Controller
 
         // 並び順ソート
         $sort = $validated['sort'] ?? 'latest';
-        switch ($sort) {
-            case 'oldest':
-                $query->oldest('id');
-                break;
-            case 'reviews_count_desc':
-                $query->orderByDesc('reviews_count');
-                break;
-            case 'rating_desc':
-                $query->orderByDesc('reviews_avg_rating');
-                break;
-            case 'latest':
-            default:
-                $query->latest('id');
-                break;
-        }
+
+        match ($sort) {
+            'oldest' => $query->oldest(),
+            'rating' => $query->orderByDesc('reviews_avg_rating'),
+            'title' => $query->orderBy('title', 'asc'),
+            default => $query->latest(),
+        };
 
         $perPage = $validated['per_page'] ?? 20;
         $books = $query->paginate($perPage);
@@ -154,7 +146,7 @@ class BookController extends Controller
         DB::transaction(function () use ($book) {
             $book->reviews()->delete();
             $book->genres()->detach();
-            $book->favoriteBooks()->detach();
+            $book->favoritedByUsers()->detach();
             $book->delete();
         });
 
