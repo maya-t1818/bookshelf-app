@@ -124,6 +124,7 @@ erDiagram
         timestamp created_at
         timestamp updated_at
     }
+    ```
 
 ## 開発環境URL
 
