@@ -22,8 +22,6 @@
 
 ## ER図
 
-## ER図
-
 ```mermaid
 erDiagram
     users ||--o{ books : "登録する"
