@@ -21,6 +21,7 @@
 - phpMyAdmin
 
 ## ER図
+
 ```mermaid
 erDiagram
     users ||--o{ books : "登録する"
@@ -29,7 +30,6 @@ erDiagram
     users ||--o{ liked_reviews : "いいねする"
     users ||--o{ reading_plans : "計画を作成する"
     users ||--o{ notifications : "通知を受け取る"
-
     books ||--o{ book_genre : "持つ"
     genres ||--o{ book_genre : "含まれる"
 
