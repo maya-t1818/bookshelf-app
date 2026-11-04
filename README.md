@@ -22,6 +22,8 @@
 
 ## ER図
 
+## ER図
+
 ```mermaid
 erDiagram
     users ||--o{ books : "登録する"
@@ -40,7 +42,7 @@ erDiagram
     reviews ||--o{ liked_reviews : "いいねされる"
 
     users {
-        bigint id PK
+        bigint id
         string name
         string email
         timestamp email_verified_at
@@ -51,18 +53,18 @@ erDiagram
     }
 
     genres {
-        bigint id PK
+        bigint id
         string name
         timestamp created_at
         timestamp updated_at
     }
 
     books {
-        bigint id PK
-        bigint user_id FK
+        bigint id
+        bigint user_id
         string title
         string author
-        string isbn UK
+        string isbn
         date published_at
         text description
         string image_url
@@ -71,17 +73,17 @@ erDiagram
     }
 
     book_genre {
-        bigint id PK
-        bigint book_id FK
-        bigint genre_id FK
+        bigint id
+        bigint book_id
+        bigint genre_id
         timestamp created_at
         timestamp updated_at
     }
 
     reviews {
-        bigint id PK
-        bigint user_id FK
-        bigint book_id FK
+        bigint id
+        bigint user_id
+        bigint book_id
         tinyint rating
         text comment
         timestamp created_at
@@ -89,25 +91,25 @@ erDiagram
     }
 
     favorites {
-        bigint id PK
-        bigint user_id FK
-        bigint book_id FK
+        bigint id
+        bigint user_id
+        bigint book_id
         timestamp created_at
         timestamp updated_at
     }
 
     liked_reviews {
-        bigint id PK
-        bigint user_id FK
-        bigint review_id FK
+        bigint id
+        bigint user_id
+        bigint review_id
         timestamp created_at
         timestamp updated_at
     }
 
     reading_plans {
-        bigint id PK
-        bigint user_id FK
-        bigint book_id FK
+        bigint id
+        bigint user_id
+        bigint book_id
         date target_date
         string status
         timestamp created_at
@@ -115,7 +117,7 @@ erDiagram
     }
 
     notifications {
-        uuid id PK
+        uuid id
         string type
         string notifiable_type
         bigint notifiable_id
@@ -124,7 +126,6 @@ erDiagram
         timestamp created_at
         timestamp updated_at
     }
-    ```
 
 ## 開発環境URL
 
